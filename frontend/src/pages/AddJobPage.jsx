@@ -15,7 +15,46 @@ const AddJobPage = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    console.log("AddJobPage");
+
+    if (!title || !type || !location || !description || !salary || !companyName || !contactEmail || !contactPhone) {
+      console.log("Please fill in all fields");
+      return;
+    }
+
+    const newJob = {
+      title,
+      type,
+      location,
+      description,
+      salary: Number(salary),
+      company: {
+        name: companyName,
+        contactEmail,
+        contactPhone,
+      }
+
+    };
+
+    addJob(newJob);
+
+  };
+
+  const addJob = async (newJob) => {
+    try {
+      const res = await fetch("/api/jobs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newJob),
+      });
+      if (res.ok) {
+        console.log("Job added successfully!");
+        navigate("/");
+      } else {
+        console.error("Failed to add job");
+      }
+    } catch (error) {
+      console.error("Error adding job:", error);
+    }
   };
 
   return (
