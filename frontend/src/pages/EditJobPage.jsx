@@ -44,11 +44,39 @@ const EditJobPage = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    console.log("EditJobPage");
+    if (!title || !description || !companyName || !contactEmail || !salary) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    const updatedJob = {
+      title,
+      description,
+      company: { name: companyName, contactEmail },
+      salary,
+    };
+
+    updateJob(updatedJob);
   };
 
-  const cancelEdit = () => {
-    console.log("cancelEdit");
+  const cancelEdit = () => navigate(`/jobs/${id}`);
+
+  const updateJob = async (updatedJob) => {
+    try {
+      const res = await fetch(`/api/jobs/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedJob),
+      });
+      if (res.ok) {
+        console.log("Job updated successfully!");
+        navigate(`/jobs/${id}`);
+      } else {
+        console.error("Failed to update job");
+      }
+    } catch (error) {
+      console.error("Error updating job:", error);
+    }
   };
 
   return (
@@ -91,7 +119,7 @@ const EditJobPage = () => {
         <label>Location:</label>
         <input value={location} onChange={(e) => setLocation(e.target.value)} />
         <label>Salary:</label>
-        <input value={salary} onChange={(e) => setSalary(e.target.value)} />
+        <input value={salary} onChange={(e) => setSalary(Number(e.target.value))} />
         <button type="submit">Update Job</button>
         <button type="button" onClick={cancelEdit}>
           Cancel

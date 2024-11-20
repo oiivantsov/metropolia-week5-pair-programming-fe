@@ -6,6 +6,16 @@ const { unknownEndpoint,errorHandler } = require("./middleware/customMiddleware"
 const connectDB = require("./config/db");
 const cors = require("cors");
 
+/*
+The purpose of CORS:
+
+A security feature in browsers that blocks requests from a different origin
+(domain, protocol, or port) than the one serving the web application.
+By default, browsers restrict cross-origin HTTP requests.
+The middleware allows the server to accept requests from other origins, such as
+when the frontend (localhost:3000) communicates with the backend (localhost:4000).
+*/
+
 // Middlewares
 app.use(cors())
 app.use(express.json());

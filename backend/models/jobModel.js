@@ -14,7 +14,17 @@ const jobSchema = new mongoose.Schema({
   postedDate: { type: Date, default: Date.now }, // Date the job was posted
 });
 
-//add  virtual field id
+/* 
+The purpose of this code snippet:
+
+virtuals: true: This includes virtual fields (fields not stored in the database but
+computed dynamically) when converting a Mongoose document to JSON.
+
+transform: Adds a new id field to the JSON representation, derived from the _id field.
+Removes the need for the frontend to deal with MongoDB-specific _id naming.
+*/
+
+// add  virtual field id
 jobSchema.set("toJSON", {
   virtuals: true,
   transform: (doc, ret) => {

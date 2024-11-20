@@ -20,8 +20,39 @@ const JobPage = () => {
     fetchJob();
   }, [id]);
 
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const res = await fetch(`/api/jobs/${id}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        if (!res.ok) {
+          throw new Error("Failed to fetch job");
+        }
+        const data = await res.json();
+        setJob(data);
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
+    };
+    fetchJob();
+  }, [id]);
+
   const deleteJob = async () => {
-    console.log(JobPage);
+    try {
+      const res = await fetch(`/api/jobs/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!res.ok) {
+        throw new Error("Failed to delete job");
+      }
+      console.log("Job deleted successfully");
+      navigate("/"); // Redirect to the home page
+    } catch (error) {
+      console.error("Error deleting job:", error);
+    }
   };
 
   if (!job) {
